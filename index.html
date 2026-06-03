@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashirwad — A Culinary Journey Through South India</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="antialiased selection:bg-[var(--color-terracotta)] selection:text-white">
+
+    <div class="grain-overlay"></div>
+
+    <div id="custom-cursor" class="hidden lg:block"></div>
+    <div id="custom-cursor-follower" class="hidden lg:block flex items-center justify-center text-[8px] font-bold text-white tracking-widest uppercase"></div>
+
+    <div id="loader">
+        <div class="w-32 h-32 relative flex items-center justify-center">
+            <svg id="loader-kolam" class="w-24 h-24 stroke-[var(--color-mustard)] fill-none" viewBox="0 0 100 100">
+                <path id="kolam-path" d="M50,10 Q65,35 90,50 Q65,65 50,90 Q35,65 10,50 Q35,35 50,10 Z" stroke-dasharray="300" stroke-dashoffset="300"/>
+                <circle cx="50" cy="50" r="5" fill="var(--color-terracotta)" opacity="0"/>
+            </svg>
+            <div class="absolute bottom-[-40px] text-center">
+                <p class="font-serif italic text-sm tracking-widest text-[#FDFBF7]/60">Welcoming You</p>
+                <h3 id="loader-percentage" class="text-[var(--color-mustard)] font-sans font-bold text-lg">0%</h3>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="font-serif text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-cream)] interactive-target">
+            Ashirwad<span class="text-[var(--color-mustard)]">.</span>
+        </a>
+        
+        <button id="menu-trigger" class="flex items-center space-x-3 text-[var(--color-cream)] interactive-target group focus:outline-none">
+            <span class="text-xs uppercase tracking-widest font-medium opacity-80 group-hover:opacity-100 transition-opacity">Menu Architecture</span>
+            <div class="w-8 h-4 relative flex flex-col justify-between">
+                <span class="w-full h-[2px] bg-[var(--color-cream)] origin-right transition-transform duration-300 group-hover:scale-x-75"></span>
+                <span class="w-3/4 h-[2px] bg-[var(--color-cream)] self-end origin-right transition-transform duration-300 group-hover:w-full"></span>
+            </div>
+        </button>
+    </nav>
+
+    <div id="menu-overlay" class="fixed inset-0 bg-[var(--color-charcoal)] z-40 hidden opacity-0 flex flex-col justify-between p-8 md:p-16">
+        <div class="flex justify-between items-start mt-16">
+            <div class="text-[var(--color-cream)]/40 text-xs tracking-widest uppercase font-mono">// Ashirwad Dining Experience Matrix</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+            <div class="flex flex-col space-y-4">
+                <a href="#hero" class="menu-link font-serif text-5xl md:text-7xl text-[var(--color-cream)] hover:text-[var(--color-mustard)] transition-colors inline-block" data-img="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80">The Threshold</a>
+                <a href="#heritage" class="menu-link font-serif text-5xl md:text-7xl text-[var(--color-cream)] hover:text-[var(--color-mustard)] transition-colors inline-block" data-img="https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=600&q=80">Our Ancestral Roots</a>
+                <a href="#curation" class="menu-link font-serif text-5xl md:text-7xl text-[var(--color-cream)] hover:text-[var(--color-mustard)] transition-colors inline-block" data-img="https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=600&q=80">The Flavor Matrix</a>
+                <a href="#experience" class="menu-link font-serif text-5xl md:text-7xl text-[var(--color-cream)] hover:text-[var(--color-mustard)] transition-colors inline-block" data-img="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80">Secure A Table</a>
+            </div>
+            <div class="hidden md:block w-full h-80 relative overflow-hidden rounded-sm">
+                <div id="menu-preview-bg" class="absolute inset-0 bg-cover bg-center scale-110 blur-sm brightness-70 transition-all duration-500"></div>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between text-[var(--color-cream)]/60 text-xs border-t border-[var(--color-cream)]/10 pt-6">
+            <p>© 2026 Ashirwad Hospitality Group.</p>
+            <p>Every Grain Tells An Authentic Story.</p>
+        </div>
+    </div>
+
+    <section id="hero" class="min-h-screen relative flex items-center justify-center pt-24 pb-12 px-6 md:px-12 overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-15 flex items-center justify-center pointer-events-none">
+            <svg class="w-[80vw] h-[80vw] animate-spin-slow text-[var(--color-terracotta)]" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="0.5" fill="none" stroke-dasharray="4,4"/>
+                <circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="0.2" fill="none"/>
+            </svg>
+        </div>
+
+        <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10 relative">
+            <div class="lg:col-span-7 flex flex-col justify-center space-y-8 order-2 lg:order-1">
+                <div class="overflow-hidden">
+                    <span id="hero-tag" class="block text-xs font-bold tracking-[0.3em] text-[var(--color-terracotta)] uppercase">Pure Heritage Culinary Art</span>
+                </div>
+                <h1 id="hero-title" class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[var(--color-charcoal)] leading-[1.05]">
+                    Honouring <br>
+                    <span class="italic font-normal text-[var(--color-sage)]">Tradition</span>, One <br>
+                    Morsel at a Time.
+                </h1>
+                <div class="w-full max-w-md space-y-6">
+                    <p class="text-sm md:text-base text-[var(--color-charcoal)]/80 leading-relaxed font-sans">
+                        At Ashirwad, we do not merely serve food; we safeguard age-old ancestral secrets from the southern peninsular coast. No shortcuts, no compromises—just pure stone-ground batters and custom spice signatures.
+                    </p>
+                    <div class="flex items-center space-x-6 pt-2">
+                        <a href="#curation" class="interactive-target relative group px-8 py-4 bg-[var(--color-charcoal)] text-[var(--color-cream)] text-xs uppercase tracking-widest font-semibold overflow-hidden block rounded-xs transition-all duration-300 hover:shadow-xl">
+                            <span class="relative z-10 block transition-transform duration-500 group-hover:-translate-y-10">Explore Our Matrix</span>
+                            <span class="absolute inset-0 top-full bg-[var(--color-terracotta)] transition-all duration-500 group-hover:top-0 z-0"></span>
+                            <span class="absolute z-10 block inset-0 flex items-center justify-center top-10 transition-all duration-500 group-hover:top-0 text-white">Explore Our Matrix</span>
+                        </a>
+                        <a href="https://maps.app.goo.gl/649PeFPCmEyVVmyx8" target="_blank" class="interactive-target text-xs font-bold tracking-widest uppercase border-b-2 border-[var(--color-charcoal)] pb-1 hover:text-[var(--color-terracotta)] hover:border-[var(--color-terracotta)] transition-colors flex items-center space-x-2">
+                            <span>Locate Our Sanctuary</span>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 relative order-1 lg:order-2 flex justify-center items-center h-[400px] md:h-[600px]">
+                <div class="absolute top-10 left-10 w-16 h-16 opacity-40 z-20 float-element">
+                    <svg viewBox="0 0 100 100" class="fill-[var(--color-mustard)]">
+                        <path d="M50 0 C 60 30, 70 30, 100 50 C 70 60, 70 70, 50 100 C 30 70, 30 60, 0 50 C 30 30, 40 30, 50 0 Z"/>
+                    </svg>
+                </div>
+                <div id="hero-img-wrap" class="w-[85%] h-[80%] relative rounded-full overflow-hidden border-[12px] border-white shadow-2xl scale-90 opacity-0">
+                    <img src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=800&q=80" alt="Signature Crispy Golden Dosa Platter" class="w-full h-full object-cover scale-110 object-center">
+                </div>
+                <div id="hero-floating-badge" class="absolute bottom-12 left-0 bg-white shadow-xl p-4 md:p-6 rounded-xs border-l-4 border-[var(--color-terracotta)] max-w-[200px] z-20 transform -translate-x-10 opacity-0">
+                    <p class="font-serif italic text-xs text-[var(--color-sage)]">Aromatic Heritage</p>
+                    <h4 class="font-sans font-bold text-sm mt-1 text-[var(--color-charcoal)]">Pure Wood-Pressed Ghee Aromas</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="heritage" class="relative min-h-screen bg-[var(--color-charcoal)] text-[var(--color-cream)] py-24 px-6 md:px-12 flex items-center">
+        <div class="absolute inset-0 opacity-5 pointer-events-none overflow-hidden flex flex-wrap justify-between p-4" id="pattern-grid-target">
+            <template id="pattern-tile">
+                <svg class="w-16 h-16 text-white" viewBox="0 0 100 100" fill="currentColor">
+                    <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M50 0 L50 100 M0 50 L100 50" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </template>
+        </div>
+
+        <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative">
+            <div class="lg:col-span-5 lg:sticky lg:top-32 space-y-6">
+                <span class="text-xs font-mono text-[var(--color-mustard)] tracking-widest block uppercase">// HISTORIC FOUNDATION</span>
+                <h2 class="font-serif text-4xl md:text-6xl font-bold tracking-tight">The Sacred Geometry of Our Craft.</h2>
+                <div class="w-24 h-[1px] bg-[var(--color-mustard)]/40"></div>
+                <p class="text-sm text-[var(--color-cream)]/70 leading-relaxed font-sans max-w-md">
+                    We see food through an architectural and cosmic lens. The dynamic crunch of a classic roast dosa, the spatial cloud-like fluff of a steamed idli—each element pays beautiful homage to old regional formulations passed down meticulously across centuries.
+                </p>
+            </div>
+
+            <div class="lg:col-span-7 space-y-24 md:space-y-48 pl-0 lg:pl-12">
+                <div class="heritage-node opacity-30 transition-all duration-500 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-4 flex justify-center">
+                        <svg class="w-24 h-24 stroke-[var(--color-mustard)] fill-none" viewBox="0 0 100 100">
+                            <ellipse cx="50" cy="65" rx="35" ry="15" stroke-width="2"/>
+                            <ellipse cx="50" cy="55" rx="30" ry="12" stroke-width="1" stroke-dasharray="2,2"/>
+                            <path class="steam-line" d="M40 40 Q45 25 40 10" stroke-width="1.5"/>
+                            <path class="steam-line" d="M50 38 Q55 20 50 8" stroke-width="1.5"/>
+                            <path class="steam-line" d="M60 42 Q55 28 60 12" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="md:col-span-8 space-y-3">
+                        <span class="font-serif italic text-[var(--color-mustard)] text-lg block">01 / The Steamed Monolith</span>
+                        <h3 class="text-xl font-bold tracking-tight font-sans">The 14-Hour Slow Batter Incubation</h3>
+                        <p class="text-xs text-[var(--color-cream)]/60 leading-relaxed font-sans">
+                            Our standard parboiled rice and black gram lentils undergo custom stone crushing inside classical stone grinders for hours, fermenting in high ambient microclimates. The resulting texture achieves unparalleled purity.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="heritage-node opacity-30 transition-all duration-500 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-4 flex justify-center">
+                        <svg class="w-28 h-24 stroke-[var(--color-terracotta)] fill-none" viewBox="0 0 120 100">
+                            <path d="M10 70 Q60 20 110 70" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M15 75 Q60 30 105 75" stroke-width="1" stroke-dasharray="4,2"/>
+                            <circle cx="35" cy="50" r="1.5" fill="var(--color-mustard)"/>
+                            <circle cx="60" cy="40" r="1.5" fill="var(--color-mustard)"/>
+                            <circle cx="85" cy="55" r="1.5" fill="var(--color-mustard)"/>
+                        </svg>
+                    </div>
+                    <div class="md:col-span-8 space-y-3">
+                        <span class="font-serif italic text-[var(--color-mustard)] text-lg block">02 / The Radiant Thermal Crisp</span>
+                        <h3 class="text-xl font-bold tracking-tight font-sans">Cast-Iron Engineering Radiance</h3>
+                        <p class="text-xs text-[var(--color-cream)]/60 leading-relaxed font-sans">
+                            Every single crisp dosa is hand-spread smoothly on dense, custom 25-kilogram cast-iron skillets. This extreme thermal mass guarantees completely even, uncompromised heat radiation for perfect golden textures.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="heritage-node opacity-30 transition-all duration-500 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-4 flex justify-center">
+                        <svg class="w-24 h-24 stroke-[var(--color-sage)] fill-none" viewBox="0 0 100 100">
+                            <path d="M30 20 H70 V45 T50 55 T30 45 Z" stroke-width="2"/>
+                            <path d="M35 60 H65 L60 90 H40 Z" stroke-width="2"/>
+                            <path class="coffee-stream" d="M50 52 V60" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="md:col-span-8 space-y-3">
+                        <span class="font-serif italic text-[var(--color-mustard)] text-lg block">03 / The Dynamic Aeration Cascade</span>
+                        <h3 class="text-xl font-bold tracking-tight font-sans">The Precision Chicory-Infused Decoction</h3>
+                        <p class="text-xs text-[var(--color-cream)]/60 leading-relaxed font-sans">
+                            Our signature intense dark brew is extracted drop by drop through traditional brass percolation filters, thrown through high air arcs from tumbler to dabarah to create perfect, velvety natural micro-foam.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="curation" class="py-24 px-6 md:px-12 bg-[var(--color-cream)] max-w-7xl mx-auto">
+        <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div class="space-y-4">
+                <span class="text-xs font-bold tracking-[0.2em] text-[var(--color-terracotta)] uppercase block">THE FLAVOR ARCHITECTURE</span>
+                <h2 class="font-serif text-4xl md:text-6xl font-bold tracking-tight text-[var(--color-charcoal)]">The Curation Matrix.</h2>
+            </div>
+            <p class="text-sm text-[var(--color-charcoal)]/70 max-w-xs font-sans">Interact with our bento grid nodes below to reveal signature highlights from our deeply considered culinary collection.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[220px]">
+            <div class="md:col-span-8 md:row-span-2 perspective-1000 transform-style-3d interactive-target relative">
+                <div class="absolute inset-0 transition-all duration-700 transform-style-3d relative w-full h-full shadow-md rounded-xs overflow-hidden">
+                    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1000&q=80');">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-charcoal)] via-transparent to-transparent p-8 flex flex-col justify-between">
+                            <span class="bg-white/90 text-[var(--color-charcoal)] backdrop-blur-sm px-3 py-1 text-[10px] tracking-widest uppercase font-bold self-start rounded-full">Signature Masterpiece</span>
+                            <div>
+                                <h3 class="font-serif text-3xl text-white font-bold">The Royal Ghee Podi Roast</h3>
+                                <p class="text-xs text-white/80 mt-2 font-sans max-w-md">Dusted generously with our proprietary house gunpowder mix consisting of roasted lentils and fiery red chillies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 md:row-span-1 bg-[var(--color-sage)] text-white p-6 rounded-xs flex flex-col justify-between relative overflow-hidden group hover:shadow-lg transition-shadow">
+                <svg class="absolute right-[-20px] bottom-[-20px] w-32 h-32 opacity-10 text-white transform rotate-45" viewBox="0 0 100 100">
+                    <path d="M50 0 C60 30, 90 40, 100 50 C70 60, 60 90, 50 100 C40 90, 30 60, 0 50 C10 40, 40 30, 50 0 Z" fill="currentColor"/>
+                </svg>
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-mono opacity-60">// COMPLEMENTARY MATRIX</span>
+                    <svg class="w-5 h-5 text-[var(--color-mustard)]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/></svg>
+                </div>
+                <div>
+                    <h4 class="font-serif text-lg font-bold">Triple Heritage Chutney Symphony</h4>
+                    <p class="text-[11px] opacity-80 mt-1 font-sans">Fresh grated coconut, tangy balancing tamarind, and charred field mint ground fresh thrice daily.</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 md:row-span-2 bg-white border border-[var(--color-charcoal)]/5 p-6 rounded-xs flex flex-col justify-between overflow-hidden group relative interactive-target">
+                <div class="absolute inset-0 bg-[var(--color-terracotta)] translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0"></div>
+                <div class="relative z-10 transition-colors duration-500 group-hover:text-white">
+                    <span class="text-xs font-mono text-[var(--color-terracotta)] group-hover:text-[var(--color-mustard)] block mb-2 font-bold uppercase">// THE STEAM CORE</span>
+                    <h4 class="font-serif text-2xl font-bold">Kanchipuram Spiced Idli Blocks</h4>
+                    <p class="text-xs opacity-70 mt-2 font-sans">Steamed delicately with subtle infusions of black pepper corns, fresh ginger shreds, and fragrant curry leaves.</p>
+                </div>
+                <div class="w-full h-32 relative overflow-hidden rounded-xs mt-4 z-10">
+                    <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=500&q=80" alt="Kanchipuram Spiced Idli Stack" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                </div>
+            </div>
+
+            <div class="md:col-span-4 md:row-span-1 bg-white border border-[var(--color-charcoal)]/10 p-6 rounded-xs flex flex-col justify-between group hover:border-[var(--color-terracotta)] transition-colors">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] tracking-widest font-bold text-[var(--color-charcoal)]/40 uppercase">Sourced Purity</span>
+                    <div class="w-2 h-2 bg-emerald-600 rounded-full animate-pulse"></div>
+                </div>
+                <div class="my-auto">
+                    <h2 class="text-4xl font-serif font-bold text-[var(--color-terracotta)]">100%</h2>
+                    <p class="text-xs font-sans text-[var(--color-charcoal)]/70 mt-1">Pure Golden A2 Cow Ghee used across all culinary processes.</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 md:row-span-1 bg-[var(--color-charcoal)] text-white p-6 rounded-xs flex items-center justify-between group overflow-hidden relative">
+                <div class="space-y-1 z-10">
+                    <span class="text-[10px] text-[var(--color-mustard)] uppercase font-mono block">Curated Pairings</span>
+                    <h4 class="font-serif text-base font-bold">The Filter Coffee Ritual</h4>
+                </div>
+                <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center z-10 group-hover:border-[var(--color-mustard)] transition-colors">
+                    <svg class="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="thali-builder" class="py-24 px-6 md:px-12 bg-[var(--color-charcoal)] text-[var(--color-cream)] relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+            <div class="w-[60vw] h-[60vw] border-[40px] border-white rounded-full"></div>
+        </div>
+
+        <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative">
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-xs font-mono text-[var(--color-mustard)] tracking-widest block uppercase">// REAL-TIME GASTRONOMIC CONFIGURATOR</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold tracking-tight leading-tight">Architect Your Custom Festive Feast.</h2>
+                <p class="text-sm text-[var(--color-cream)]/70 font-sans leading-relaxed">
+                    South Indian culinary philosophy embraces structural balance. Use our real-time interactive matrix configurator to select components and craft your personalized therapeutic meal platter.
+                </p>
+                
+                <div class="space-y-4 pt-4" id="thali-controls">
+                    <div>
+                        <span class="text-[11px] uppercase tracking-wider text-[var(--color-mustard)] block mb-2 font-mono">1. Select Core Carbs Base</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button data-item="Malabar Parotta" data-desc="Flaky, multi-layered golden wheat flatbread entirely hand-flipped." class="thali-btn px-4 py-2 text-xs bg-white/10 hover:bg-white/20 border border-transparent rounded-xs transition-all font-sans interactive-target">Malabar Parotta</button>
+                            <button data-item="Scented Red Rice" data-desc="Nutrient-dense indigenous Kerala red rice steamed to soft perfection." class="thali-btn px-4 py-2 text-xs bg-white/10 hover:bg-white/20 border border-transparent rounded-xs transition-all font-sans interactive-target">Scented Red Rice</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-[11px] uppercase tracking-wider text-[var(--color-mustard)] block mb-2 font-mono">2. Select Primary Stew Lens</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button data-item="Traditional Sambar" data-desc="Slow-simmered drumstick and lentil broth infused with our secret hand-pounded spice mix." class="thali-btn px-4 py-2 text-xs bg-white/10 hover:bg-white/20 border border-transparent rounded-xs transition-all font-sans interactive-target">Traditional Sambar</button>
+                            <button data-item="Classic Malabar Avial" data-desc="A rich, thick heritage blend of indigenous field vegetables massaged with fresh grated coconut and sour curd." class="thali-btn px-4 py-2 text-xs bg-white/10 hover:bg-white/20 border border-transparent rounded-xs transition-all font-sans interactive-target">Classic Malabar Avial</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 flex flex-col items-center justify-center bg-white/5 border border-white/10 p-8 md:p-12 rounded-xs backdrop-blur-md relative min-h-[450px]">
+                <div class="w-72 h-72 md:w-96 md:h-96 bg-[var(--color-sage)] rounded-full relative flex items-center justify-center p-8 transition-transform duration-500 hover:scale-105 shadow-2xl">
+                    <svg class="absolute inset-0 w-full h-full text-black/10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M50 0 Q52 50 50 100" stroke="currentColor" stroke-width="1" fill="none"/>
+                        <path d="M50 20 Q70 25 90 15 M50 40 Q70 45 90 35 M50 60 Q70 65 90 55 M50 15 Q30 20 10 10 M50 35 Q30 40 10 30" stroke="currentColor" stroke-width="0.5" fill="none"/>
+                    </svg>
+                    
+                    <div id="thali-visual-carb" class="absolute inset-0 m-auto w-32 h-32 md:w-40 md:h-40 bg-[var(--color-mustard)] rounded-full border-4 border-white/20 shadow-xl flex items-center justify-center transition-all duration-500 scale-90">
+                        <span class="text-[var(--color-charcoal)] font-serif text-center font-bold text-xs p-2 leading-tight" id="carb-label">Malabar Parotta</span>
+                    </div>
+                    <div id="thali-visual-stew" class="absolute top-4 right-4 w-20 h-20 md:w-24 md:h-24 bg-[var(--color-terracotta)] rounded-full border-2 border-white/20 shadow-lg flex items-center justify-center transition-all duration-500 scale-90">
+                        <span class="text-white font-serif text-center font-semibold text-[10px] p-2 leading-tight" id="stew-label">Traditional Sambar</span>
+                    </div>
+                    <div class="absolute bottom-4 left-6 w-14 h-14 bg-white rounded-full flex items-center justify-center text-[var(--color-charcoal)] font-sans font-bold text-[9px] shadow-md">Payasam</div>
+                    <div class="absolute bottom-12 right-4 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-[var(--color-charcoal)] font-sans font-bold text-[9px] shadow-md">Papadum</div>
+                </div>
+
+                <div class="mt-8 text-center max-w-sm">
+                    <h4 id="active-thali-title" class="font-serif text-xl font-bold text-[var(--color-mustard)]">Malabar Parotta & Sambar Trio</h4>
+                    <p id="active-thali-desc" class="text-xs text-[var(--color-cream)]/60 mt-2 font-sans">Flaky, multi-layered golden wheat flatbread entirely hand-flipped paired with slow-simmered lentil broth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-24 px-6 md:px-12 bg-[var(--color-cream)] border-t border-[var(--color-charcoal)]/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-5 space-y-8">
+                <h2 class="font-serif text-4xl md:text-6xl font-bold tracking-tight text-[var(--color-charcoal)]">Join Us at the Family Table.</h2>
+                <p class="text-sm text-[var(--color-charcoal)]/70 leading-relaxed font-sans">
+                    We welcome extended families, group celebrations, and passionate culinary explorers with the deep, warm hospitality that definitions our timeless culture. Walk straight in or secure your digital reservation priority slot.
+                </p>
+
+                <div class="space-y-4 text-xs font-sans tracking-wide">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-2 h-2 bg-[var(--color-terracotta)] rounded-full"></span>
+                        <p class="text-[var(--color-charcoal)]"><strong>Location Sanctuary:</strong> Ground Floor, Premium Retail Zone, Gandhinagar, Gujarat</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="w-2 h-2 bg-[var(--color-sage)] rounded-full"></span>
+                        <p class="text-[var(--color-charcoal)]"><strong>Hours of Operation:</strong> 11:00 AM — 11:00 PM Daily without exception</p>
+                    </div>
+                </div>
+
+                <a href="https://maps.app.goo.gl/649PeFPCmEyVVmyx8" target="_blank" class="interactive-target inline-flex items-center space-x-4 p-4 bg-white border border-[var(--color-charcoal)]/10 rounded-xs shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-10 h-10 bg-[var(--color-terracotta)]/10 text-[var(--color-terracotta)] rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[var(--color-charcoal)]">Launch Google Maps Navigation Matrix</p>
+                        <p class="text-[10px] text-[var(--color-charcoal)]/50 mt-0.5">External link to our verified restaurant geolocation</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="lg:col-span-7 bg-white p-8 md:p-12 rounded-xs shadow-xl border border-[var(--color-charcoal)]/5">
+                <form id="reservation-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold tracking-widest uppercase text-[var(--color-charcoal)]/60 font-sans block">Patron Moniker</label>
+                            <input type="text" required placeholder="e.g. Anand Iyer" class="w-full bg-[var(--color-cream)] border border-[var(--color-charcoal)]/10 p-3 text-xs rounded-xs focus:outline-none focus:border-[var(--color-terracotta)] transition-colors font-sans">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold tracking-widest uppercase text-[var(--color-charcoal)]/60 font-sans block">Contact Matrix Number</label>
+                            <input type="tel" required placeholder="e.g. +91 98450 12345" class="w-full bg-[var(--color-cream)] border border-[var(--color-charcoal)]/10 p-3 text-xs rounded-xs focus:outline-none focus:border-[var(--color-terracotta)] transition-colors font-sans">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold tracking-widest uppercase text-[var(--color-charcoal)]/60 font-sans block">Patron Headcount</label>
+                            <select class="w-full bg-[var(--color-cream)] border border-[var(--color-charcoal)]/10 p-3 text-xs rounded-xs focus:outline-none focus:border-[var(--color-terracotta)] transition-colors font-sans">
+                                <option>2 Guests Matrix</option>
+                                <option>4 Guests Family Suite</option>
+                                <option>6+ Extended Family feast</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold tracking-widest uppercase text-[var(--color-charcoal)]/60 font-sans block">Temporal Selection Date</label>
+                            <input type="date" required class="w-full bg-[var(--color-cream)] border border-[var(--color-charcoal)]/10 p-3 text-xs rounded-xs focus:outline-none focus:border-[var(--color-terracotta)] transition-colors font-sans">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold tracking-widest uppercase text-[var(--color-charcoal)]/60 font-sans block">Preferred Dining Window</label>
+                            <select class="w-full bg-[var(--color-cream)] border border-[var(--color-charcoal)]/10 p-3 text-xs rounded-xs focus:outline-none focus:border-[var(--color-terracotta)] transition-colors font-sans">
+                                <option>Breakfast Convergence (11:00 AM)</option>
+                                <option>Midday Prana Peak (01:30 PM)</option>
+                                <option>Sunset Twilight Supper (08:30 PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="interactive-target w-full py-4 bg-[var(--color-terracotta)] hover:bg-[var(--color-charcoal)] text-white font-sans text-xs uppercase tracking-widest font-bold rounded-xs transition-colors duration-300">
+                        Transmit Priority Digital Booking Request
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto mt-24 pt-8 border-t border-[var(--color-charcoal)]/10 flex flex-col md:flex-row justify-between items-center text-[11px] text-[var(--color-charcoal)]/50 gap-4">
+            <p>© 2026 Ashirwad South Indian Restaurant. Built upon sacred family culinary guidelines.</p>
+            <div class="flex space-x-6">
+                <a href="https://maps.app.goo.gl/649PeFPCmEyVVmyx8" target="_blank" class="hover:text-[var(--color-terracotta)] transition-colors interactive-target">Google Maps Verification</a>
+                <span class="opacity-30">|</span>
+                <p>Designed with absolute experiential intent</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/animation.js"></script>
+</body>
+</html>
